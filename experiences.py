@@ -1,11 +1,8 @@
 import os
 os.environ['TK_SILENCE_DEPRECATION'] = '1'
 import csv  
-# Import matplotlib en premier
 import matplotlib
-matplotlib.use('TkAgg')  # Configuration du backend
-
-# Puis les autres imports
+matplotlib.use('TkAgg')  
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk,messagebox
@@ -19,9 +16,7 @@ from scipy.spatial import distance_matrix
 import matplotlib.pyplot as plt
 from math import sqrt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import random  # Nouvel import pour la génération aléatoire
-from choix_random import Choix_random
-# Vos imports personnels
+import random  
 from euclidienne_distance import Euclidienne_Distance
 from espace_metrique import Espace_metrique
 from choix_random import Choix_random 
@@ -41,14 +36,14 @@ class ExperienceAleatoire:
         self.setup_ui()
 
     def setup_ui(self):
-        # Configuration de la fenêtre
+       
         self.parent.geometry("500x300")
         main_frame = ttk.Frame(self.parent, padding="20")
         main_frame.pack(fill=tk.BOTH, expand=True)
         
         self.arbres_frame = ttk.Frame(self.parent)
         self.arbres_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
-        # Titre
+    
         Label(main_frame, 
               text="Paramètres des Expériences",
               font=('Arial', 14)).grid(row=0, columnspan=2, pady=10)
@@ -59,10 +54,9 @@ class ExperienceAleatoire:
         self.combo_exp = ttk.Combobox(main_frame, 
                              values=[1,10, 20, 30, 40, 50, 60, 80, 100, 200, 300, 
                                     400, 500, 600, 700, 800,1000,2000,3000,4000,5000,30000],
-                             state='readonly')  # readonly empêche la saisie manuelle
+                             state='readonly')  
         self.combo_exp.grid(row=1, column=1, pady=5)
-        self.combo_exp.set(10)  # Valeur par défaut
-
+        self.combo_exp.set(10)  
         #ttk.Label(main_frame, text="Nombre d'expériences:").grid(row=1, column=0, sticky='e')
        # self.entry_exp = ttk.Entry(main_frame)
         #self.entry_exp.grid(row=1, column=1, pady=5)
@@ -75,9 +69,9 @@ class ExperienceAleatoire:
         self.combo_nbp = ttk.Combobox(main_frame, 
                              values=[3, 4, 5,  6, 7, 8, 9, 10, 
                                     ],
-                             state='readonly')  # readonly empêche la saisie manuelle
+                             state='readonly')  
         self.combo_nbp.grid(row=2, column=1, pady=5)
-        self.combo_nbp.set(3)  # Valeur par défaut
+        self.combo_nbp.set(3)  
 
         #ttk.Label(main_frame, text="Nombre de cluster:").grid(row=3, column=0, sticky='e')
         #self.entry_cluster = ttk.Entry(main_frame)
@@ -87,7 +81,7 @@ class ExperienceAleatoire:
         self.combo_nbc = ttk.Combobox(main_frame, 
                              values=[2,3, 4, 5,  6, 7, 8, 9, 10, 
                                     ],
-                             state='readonly')  # readonly empêche la saisie manuelle
+                             state='readonly') 
         self.combo_nbc.grid(row=3, column=1, pady=5)
         self.combo_nbc.set(2)  # Valeur par défaut
 
@@ -99,10 +93,9 @@ class ExperienceAleatoire:
         self.combo_axeX = ttk.Combobox(main_frame, 
                              values=[10,20, 30, 40, 50 
                                     ],
-                             state='readonly')  # readonly empêche la saisie manuelle
+                             state='readonly') 
         self.combo_axeX.grid(row=4, column=1, pady=5)
-        self.combo_axeX.set(10)  # Valeur par défaut
-
+        self.combo_axeX.set(10)  
         #ttk.Label(main_frame, text="Axe Y max:").grid(row=5, column=0, sticky='e')
         #self.entry_y = ttk.Entry(main_frame)
         #self.entry_y.grid(row=5, column=1, pady=5)
@@ -111,10 +104,10 @@ class ExperienceAleatoire:
         self.combo_axeY = ttk.Combobox(main_frame, 
                              values=[10,20, 30, 40, 50 
                                     ],
-                             state='readonly')  # readonly empêche la saisie manuelle
+                             state='readonly')  
         self.combo_axeY.grid(row=5, column=1, pady=5)
-        self.combo_axeY.set(10)  # Valeur par défaut
-        # Bouton de lancement
+        self.combo_axeY.set(10)  
+        
         btn_lancer = ttk.Button(main_frame, 
                               text="Lancer les expériences",
                               command=self.lancer_experiences)
@@ -145,23 +138,23 @@ class ExperienceAleatoire:
             weight = np.linalg.norm(np.array(points[child]) - np.array(points[parent_idx]))
             G_ff.add_edge(num_child, num_parent, weight=weight)
 
-        # Construction du graphe pi_prime
+       
         G_pi = nx.Graph()
         for (child_num, parent_num), weight in edge_lengths_pi.items():
             G_pi.add_edge(child_num, parent_num, weight=weight)
 
-        # Positions pour le tracé
+     
         pos_ff = {node: coords_ff[node] for node in G_ff.nodes()}
         pos_pi = {node: coords_pi[node] for node in G_pi.nodes()}
 
         plt.figure(figsize=(12, 6))
 
-        # Affichage graphe Farthest-First
+       
         plt.subplot(1, 2, 1)
         nx.draw(G_ff, pos=pos_ff, with_labels=True, node_color='skyblue', edge_color='gray', node_size=300)
         plt.title("Arbre Farthest-First Traversal (π)")
 
-        # Affichage graphe hiérarchique pi_prime
+        
         plt.subplot(1, 2, 2)
         nx.draw(G_pi, pos=pos_pi, with_labels=True, node_color='lightgreen', edge_color='gray', node_size=300)
         plt.title("Arbre Hiérarchique (π')")
@@ -170,18 +163,18 @@ class ExperienceAleatoire:
 
     def afficher_partitions(self):
         try:
-        # Vérification profonde des données
+       
             if not hasattr(self, 'partitions_maximales') or not self.partitions_maximales:
                 raise ValueError("Aucun cluster disponible")
             
             if not hasattr(self, 'points_maximaux') or len(self.points_maximaux) == 0:
                 raise ValueError("Points non disponibles")
         
-        # Préparation de la figure
+      
             fig, ax = plt.subplots(figsize=(10, 6))
             colors = plt.cm.tab10.colors
         
-            # Affichage cluster par cluster avec vérification
+           
             for i, cluster in enumerate(self.partitions_maximales):
                 try:
                     points = []
@@ -211,14 +204,14 @@ class ExperienceAleatoire:
             print(f"DEBUG - Points: {getattr(self, 'points_maximaux', None)}")
     def lancer_experiences(self):
         try:
-            # Récupération des valeurs
+         
             nb_exp = int(self.combo_exp.get())
             nb_points = int(self.combo_nbp.get())
             nb_clusters = int(self.combo_nbc.get())
             axe_x = int(self.combo_axeX.get())
             axe_y = int(self.combo_axeY.get())
 
-            self.coord_max_facteur_ff =[]  #la liste pour stocker es coordonnees du facteur maximal 
+            self.coord_max_facteur_ff =[]  
             self.coord_max_facteur_pi_prime=[]
             self.coord_max_facteur_cluster=[]
             self.coord_max_facteur_points=[]
@@ -229,23 +222,22 @@ class ExperienceAleatoire:
             self.coordonner_cout_diametre=[]
             self.coord_max_facteur_D=[]
 
-            # Créer une nouvelle fenêtre pour afficher les résultats
             result_window = Toplevel(self.parent)
             result_window.title(f"Résultats des {nb_exp} expériences")
             result_window.geometry("1000x600")
         
-            # Cadre principal
+         
             main_frame = Frame(result_window)
             main_frame.pack(fill=BOTH, expand=True, padx=10, pady=10)
         
-            # Frame pour le tableau
+           
             table_frame = Frame(main_frame)
             table_frame.pack(fill=BOTH, expand=True)
         
-            # Création du Treeview avec colonnes
+           
             tree = ttk.Treeview(table_frame, columns=("Expérience", "Coût FF", "Coût π","CoûtOptimal","cout_diametre","facteur: π/cout_diametre", "facteur π/CoûtOptimal"), show="headings")
         
-            # Configuration des colonnes
+         
             tree.heading("Expérience", text="Expérience")
             tree.heading("Coût FF", text="Coût FF")
             tree.heading("Coût π", text="Coût π")
@@ -262,25 +254,25 @@ class ExperienceAleatoire:
             tree.column("facteur: π/cout_diametre", width=150, anchor='center')
             tree.column("facteur π/CoûtOptimal", width=200, anchor='center')
         
-            # Scrollbars
+         
             vsb = ttk.Scrollbar(table_frame, orient="vertical", command=tree.yview)
             hsb = ttk.Scrollbar(table_frame, orient="horizontal", command=tree.xview)
             tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
         
-            # Placement
+            
             tree.grid(row=0, column=0, sticky="nsew")
             vsb.grid(row=0, column=1, sticky="ns")
             hsb.grid(row=1, column=0, sticky="ew")
         
-            # Configuration du redimensionnement
+           
             table_frame.grid_rowconfigure(0, weight=1)
             table_frame.grid_columnconfigure(0, weight=1)
         
-            # Frame pour les boutons
+     
             button_frame = Frame(main_frame)
             button_frame.pack(fill=X, pady=10)
         
-            # Bouton pour exporter les résultats
+            
             export_button = ttk.Button(button_frame, text="Exporter vers CSV", 
                                     command=lambda: self.exporter_vers_csv(tree))
             export_button.pack(side=LEFT, padx=5)
@@ -293,20 +285,20 @@ class ExperienceAleatoire:
                                     command=lambda: self.afficher_partitions())
             afficher_partitions.pack(side=LEFT, padx=5)
 
-            # Frame pour les statistiques
+           
             stats_frame = Frame(main_frame)
             stats_frame.pack(fill=X, pady=10)
         
-            # Variables pour les statistiques
+            
             self.facteur = []
             self.facteur_cout_similaire=[]
-            self.facteur_cout_similaire_max_global=float('-inf')  # Pour suivre le max global
-            self.facteur_max_global = float('-inf')  # Pour suivre le max global
+            self.facteur_cout_similaire_max_global=float('-inf') 
+            self.facteur_max_global = float('-inf')  
 
-            # Fonction pour exécuter une expérience et mettre à jour l'interface
-            # Création des labels une seule fois
             self.stats_label = Label(stats_frame, font=('Arial', 12, 'bold'))
             self.stats_label.pack()
+            self.stats_label_diametre = Label(stats_frame, font=('Arial', 12, 'bold'))
+            self.stats_label_diametre.pack()
             self.coord_label = Label(stats_frame, font=('Arial', 10))
             self.coord_label.pack()
             self.cluster_label = Label(stats_frame, font=('Arial', 10))
@@ -329,12 +321,12 @@ class ExperienceAleatoire:
                         facteur_cout_similaire=row["facteur: π/cout_diametre"]
                         self.facteur.append(facteur)
                         self.facteur_cout_similaire.append(facteur_cout_similaire)
-                        # Insérer dans le tableau
+
+                        
                         if facteur > self.facteur_max_global:
                             self.facteur_max_global = facteur
+                            
 
-                            # Récupération directe depuis les attributs privés
-                                                    # Sauvegarde des données associées au max
                             self.coord_max_facteur_ff = getattr(self.parent, 'coords_ff', [])
                             self.coord_max_facteur_pi_prime = getattr(self.parent, 'coords_pi', [])
                             self.coord_max_facteur_cluster = getattr(self.parent, 'clusters', [])
@@ -348,7 +340,7 @@ class ExperienceAleatoire:
                            # self.coordonner_facteur_cout_similaire=getattr(self.parent,'facteur: π/cout_diametre',[])
 
 
-                            # Fermer l'ancienne fenêtre d'arbre si elle existe
+                           
                             if hasattr(self, 'tree_window') and self.tree_window.winfo_exists():
                                     self.tree_window.destroy()
                             if hasattr(self, 'pi_prime_window') and self.pi_prime_window.winfo_exists():
@@ -359,20 +351,21 @@ class ExperienceAleatoire:
 
                             # Afficher π'
                             self.afficher_arbre_pi_prime(result_window, facteur, self.coord_max_facteur_D)
-                            # Vérification des données
+                           
+                           #petite affichage pour verifer le calcule 
                             print("\n=== VÉRIFICATION DES DONNÉES ===")
                             print(f"Nombre de points: {len(self.coord_max_facteur_points)}")
                             print(f"Indices sélectionnés: {self.coord_max_facteur_selected_indices}")
                             print(f"Parents: {self.coord_max_facteur_parent_indices}")
                             print(f"Valeurs R: {self.coord_max_facteur_R_values}")  
-                             # Debug
+                         
                             print("=== NOUVEAU MAX TROUVÉ ===")
                             print(f"Points shape: {self.coord_max_facteur_points.shape}")
                             print(f"Selected indices: {self.coord_max_facteur_selected_indices}")
                             print(f"Parent indices: {self.coord_max_facteur_parent_indices}")
                             print(f"R values: {self.coord_max_facteur_R_values}")
 
-                        # Debug: affichage dans la console
+                   
                             print("=== NOUVEAU MAX TROUVÉ ===")
                             print(f"Facteur: {facteur:.2f}")
                             print(f"Points: {self.coord_max_facteur_points}")
@@ -388,7 +381,7 @@ class ExperienceAleatoire:
                                 for i, cluster in enumerate(self.coord_max_facteur_cluster):
                                     f.write(f"Cluster {i+1}: {cluster}\n")
 
-                        #insertion dans le tableau 
+                      
                         tree.insert("", "end", values=(
                             f"Expérience {exp_num}",
                             f"{row['Coût FF']:.2f}",
@@ -399,14 +392,19 @@ class ExperienceAleatoire:
                             f"{facteur:.2f}" if not pd.isna(facteur) else "N/A"
                         ))
 
-                        # Faire défiler vers le bas
-                        #tree.yview_moveto(1)
-
-                    # Mise à jour des labels (pas de création de nouveaux labels)
+                        if self.facteur_cout_similaire:
+                            print("Valeur maximale :", max(self.facteur_cout_similaire))
+                            self.stats_label_diametre.config(
+                                text=f"Statistiques - Max_facteur_coût_similaire: {max(self.facteur_cout_similaire):.2f} | Min: {min(self.facteur_cout_similaire):.2f}"
+                            )
+                        else:
+                            print("La liste est vide.")
+                            
                         if self.facteur:
                             self.stats_label.config(
-                                text=f"Statistiques - Max: {max(self.facteur):.2f} | Min: {min(self.facteur):.2f}"
+                                text=f"Statistiques - Max_facteur_coût_différent {max(self.facteur):.2f} | Min: {min(self.facteur):.2f}"
                             )
+                           
                             self.coord_label.config(
                                 text=f"Coordonnées du facteur maximal : {self.coordonner_optimale}"
                             )
@@ -414,10 +412,9 @@ class ExperienceAleatoire:
                                 text=f"Cluster_optimale : {self.coord_max_facteur_cluster}"
                             
                         )
-                            
-
+                        
                         tree.yview_moveto(1)
-                    # Planifier la prochaine expérience si ce n'est pas la dernière
+                
                     if exp_num < nb_exp:
                         result_window.after(100, lambda: executer_experience(exp_num + 1))
                     else:
@@ -431,8 +428,7 @@ class ExperienceAleatoire:
                     if exp_num < nb_exp:
                         result_window.after(100, lambda: executer_experience(exp_num + 1))
 
-        
-            # Démarrer la première expérience
+    
             executer_experience(1)
         
         except ValueError:
@@ -448,12 +444,12 @@ class ExperienceAleatoire:
         fig = Figure(figsize=(8, 6))
         ax = fig.add_subplot(111)
     
-    # Dessin des points
+
         ax.scatter(self.coord_max_facteur_points[:, 0], 
                 self.coord_max_facteur_points[:, 1], 
                 c='gray', s=60)
     
-        # Dessin des arêtes FFT
+     
         for i in range(1, len(self.coord_max_facteur_selected_indices)):
             child_idx = self.coord_max_facteur_selected_indices[i]
             parent_idx = self.coord_max_facteur_parent_indices[i]
@@ -463,14 +459,13 @@ class ExperienceAleatoire:
         
             ax.plot([start[0], end[0]], [start[1], end[1]], 
                 'k--', linewidth=1)
-        
-        # Affichage distance
+
             mid_x = (start[0] + end[0]) / 2
             mid_y = (start[1] + end[1]) / 2
             ax.text(mid_x, mid_y, f"{self.coord_max_facteur_R_values[i]:.2f}", 
                 fontsize=9, color='blue')
 
-    # Numérotation
+
         for k, idx in enumerate(self.coord_max_facteur_selected_indices):
             ax.scatter(self.coord_max_facteur_points[idx][0], 
                     self.coord_max_facteur_points[idx][1], 
@@ -487,11 +482,11 @@ class ExperienceAleatoire:
         canvas.get_tk_widget().pack(fill=BOTH, expand=True)
 
     def afficher_arbre_pi_prime(self, parent_window, facteur, D):
-        """Affiche l'arbre π' en utilisant hierarchical_tree"""
+       
         self.pi_prime_window = Toplevel(parent_window)
         self.pi_prime_window.title(f"Arbre π' (Facteur max: {facteur:.2f})")
     
-        # Calcul de l'arbre π'
+      
         pi_prime, edge_lengths, _, _ = Choix_random.hierarchical_tree(
             D, 
             self.coord_max_facteur_selected_indices,
@@ -501,12 +496,10 @@ class ExperienceAleatoire:
         fig = Figure(figsize=(8, 6))
         ax = fig.add_subplot(111)
     
-        # Dessin des points
         ax.scatter(self.coord_max_facteur_points[:, 0], 
                 self.coord_max_facteur_points[:, 1], 
                 c='gray', s=60)
     
-        # Dessin des arêtes π'
         for (child_num, parent_num), dist in edge_lengths.items():
             child_idx = self.coord_max_facteur_selected_indices[child_num-1]
             parent_idx = self.coord_max_facteur_selected_indices[parent_num-1]
@@ -516,14 +509,13 @@ class ExperienceAleatoire:
         
             ax.plot([start[0], end[0]], [start[1], end[1]], 
                     'b-', linewidth=1)
-        
-            # Affichage distance
+      
             mid_x = (start[0] + end[0]) / 2
             mid_y = (start[1] + end[1]) / 2
             ax.text(mid_x, mid_y, f"{dist:.2f}", 
                 fontsize=9, color='darkblue')
 
-        # Numérotation
+   
         for k, idx in enumerate(self.coord_max_facteur_selected_indices):
             ax.scatter(self.coord_max_facteur_points[idx][0], 
                     self.coord_max_facteur_points[idx][1], 
@@ -555,7 +547,7 @@ class ExperienceAleatoire:
         plt.title(f'Clustering Optimal (Coût: {cout_optimal:.3f})')
         plt.legend()
     
-        # 2. Graphe Farthest-First
+    
         plt.subplot(1, 3, 2)
         G_ff = nx.Graph()
         for i in range(1, len(parent_indices)):
@@ -568,7 +560,7 @@ class ExperienceAleatoire:
         pos_ff = {node: points[selected_indices[node-1]] for node in G_ff.nodes()}
         nx.draw(G_ff, pos_ff, with_labels=True, node_color='lightblue')
         plt.title(f'Farthest-First Tree (Coût: {cost_ff:.3f})')
-        # 3. Graphe Hiérarchique
+  
         plt.subplot(1, 3, 3)
         G_pi = nx.Graph()
         for child_num, parent_num in pi_prime.items():
@@ -582,9 +574,9 @@ class ExperienceAleatoire:
         plt.tight_layout()
         plt.show()
     def exporter_vers_csv(self, tree):
-        """Exporte les résultats du Treeview vers un fichier CSV"""
+       
         try:
-            # Demander où sauvegarder le fichier
+         
             from tkinter import filedialog
             filepath = filedialog.asksaveasfilename(
                 defaultextension=".csv",
@@ -592,19 +584,19 @@ class ExperienceAleatoire:
                 title="Enregistrer les résultats"
             )
         
-            if not filepath:  # L'utilisateur a annulé
+            if not filepath: 
                 return
         
-            # Récupérer toutes les lignes du Treeview
+           
             with open(filepath, 'w', newline='', encoding='utf-8') as f:
-                writer = csv.writer(f, delimiter=';')  # Utilisation du point-virgule comme séparateur
-                # Écrire l'en-tête
+                writer = csv.writer(f, delimiter=';')  
+               
                 writer.writerow(["Expérience", "Coût FF", "Coût π′", "CoûtOptimal","facteur π′/CoûtOptimal"])
             
-                # Écrire les données
+               
                 for child in tree.get_children():
                     row = tree.item(child)['values']
-                    # Nettoyer les valeurs avant écriture
+                    
                     cleaned_row = [
                         str(item).replace(';', ',') if item else '' 
                         for item in row
@@ -620,42 +612,42 @@ class ExperienceAleatoire:
     def afficher_resultats_facteur(self, tableau_final):
         """Affiche les résultats du calcul de facteur"""
         try:
-            # Convertir les colonnes en numérique
+     
             tableau_final['facteur π′/CoûtOptimal'] = pd.to_numeric(tableau_final['facteur  π′/CoûtOptimal'], errors='coerce')
         
             result_window = Toplevel(self.parent)
             result_window.title("Résultats du facteur de coût")
             result_window.geometry("800x600")
 
-            # Cadre principal
+    
             main_frame = Frame(result_window)
             main_frame.pack(fill=BOTH, expand=True, padx=10, pady=10)
 
-            # Texte résumé
+         
             summary_frame = Frame(main_frame)
             summary_frame.pack(fill=tk.X, pady=5)
     
             facteur_max = tableau_final['facteur  π′/CoûtOptimal'].max()
             facteur_moyen = tableau_final['facteur π′/CoûtOptimal'].mean()
     
-            # Formatage des nombres avec 2 décimales
+         
             tk.Label(summary_frame, 
                 text=f"facteur maximal: {facteur_max:.2f} | facteur moyen: {facteur_moyen:.2f}",
                 font=('Arial', 12, 'bold')).pack()
 
-            # Tableau des résultats
+       
             tree_frame = Frame(main_frame)
             tree_frame.pack(fill=BOTH, expand=True)
 
-            # Création du Treeview
+         
             tree = ttk.Treeview(tree_frame, columns=list(tableau_final.columns), show="headings")
         
-            # Configuration des colonnes
+        
             for col in tableau_final.columns:
                 tree.heading(col, text=col)
                 tree.column(col, width=100, anchor='center')
 
-            # Ajout des données avec vérification numérique
+        
             for _, row in tableau_final.iterrows():
                 values = [
                     f"{row['Itération']}",
@@ -666,17 +658,17 @@ class ExperienceAleatoire:
                 ]
                 tree.insert("", "end", values=values)
 
-            # Scrollbars
+     
             vsb = ttk.Scrollbar(tree_frame, orient="vertical", command=tree.yview)
             hsb = ttk.Scrollbar(tree_frame, orient="horizontal", command=tree.xview)
             tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
 
-            # Placement
+       
             tree.grid(row=0, column=0, sticky="nsew")
             vsb.grid(row=0, column=1, sticky="ns")
             hsb.grid(row=1, column=0, sticky="ew")
 
-            # Configuration du redimensionnement
+           
             tree_frame.grid_rowconfigure(0, weight=1)
             tree_frame.grid_columnconfigure(0, weight=1)
 
@@ -685,19 +677,17 @@ class ExperienceAleatoire:
             print(f"Erreur détaillée: {traceback.format_exc()}")
 
     def quitter_application(self):
-        """Ferme proprement l'application"""
+       
         if messagebox.askokcancel("Quitter", "Voulez-vous vraiment quitter l'application ?"):
-            self.parent.destroy()  # Ferme la fenêtre principale
-            # Si vous avez d'autres processus à arrêter, ajoutez-les ici
+            self.parent.destroy()  
 
-        #self.espace_visible = True
 
     def executer_experiences(self,nombre_experience,nombre_points,taille_X,taille_Y):
         """Exécute les expériences sans afficher l'interface Choix_random"""
         resultats = Choix_random.calculer_facteur(parent=self)
     
         if resultats is not None:
-                    # Affichez les résultats dans une nouvelle fenêtre
+                    
             self.afficher_resultats_experiences(resultats)
     
     
@@ -706,7 +696,7 @@ class ExperienceAleatoire:
         fenetre_resultats = Toplevel(self)
         fenetre_resultats.title("Résultats des expériences")
         
-        # Créez un Treeview pour afficher les résultats
+       
         tree = ttk.Treeview(fenetre_resultats, columns=list(resultats.columns), show="headings")
         
         for col in resultats.columns:

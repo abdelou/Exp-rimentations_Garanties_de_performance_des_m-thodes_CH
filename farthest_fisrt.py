@@ -3,9 +3,9 @@ from math import inf
 from euclidienne_distance import Euclidienne_Distance
 class Farthest_First_Traversal:
     def __init__(self, beta=2, R=1.0):
-        self.beta = beta  # Facteur de granularité hiérarchique
-        self.R = R       # Rayon initial pour les niveaux
-        self.distance_calculator = Euclidienne_Distance() #gerer une instance
+        self.beta = beta 
+        self.R = R       
+        self.distance_calculator = Euclidienne_Distance() 
 
     def lev(self, p, r):
         """Calcule le niveau hiérarchique d'un point en fonction de son rayon r."""
@@ -23,12 +23,10 @@ class Farthest_First_Traversal:
             p_j = P[j]
             r = self.distance_calculator.calcule_distance(px, p_j)
 
-            # Mise à jour de min_S
             if r < min_S[j][0]:
                 min_S[j][0] = r
                 min_S[j][1] = px
 
-            # Sélection du point avec la plus grande distance minimale
             if min_S[j][0] > greatest_low_distance:
                 greatest_low_distance = min_S[j][0]
                 p_f = p_j
@@ -54,26 +52,24 @@ class Farthest_First_Traversal:
 
     def traverse(self, P):
         """Algorithme principal de Farthest-First Traversal."""
-        S = []  # Points sélectionnés
+        S = [] 
         n = len(P)
 
-        # Étape 1: Sélection aléatoire du premier point
         px = P[np.random.choice(range(n))]
         S.append(px)
         P.remove(px)
 
-        # Initialisation de min_S: [(distance_min, parent), ...]
         min_S = [[inf, None] for _ in range(n)]
 
-        # Itérations pour sélectionner les points restants
+    
         for i in range(1, n):
             px = S[-1]
             p_f, p_p = self.PI(P, px, min_S)
 
             if p_f is None:
-                break  # Tous les points sont traités
+                break 
 
-            # Mise à jour des structures
+            
             S.append(p_f)
             P.remove(p_f)
 

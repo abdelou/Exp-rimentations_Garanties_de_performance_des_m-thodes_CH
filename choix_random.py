@@ -25,7 +25,7 @@ class Choix_random:
         self.parent.title("Visualisation des arbres π et π'")
         self.parent.geometry("800x800")
         
-        # Variables pour stocker les données des arbres
+       
         self.points_array = None
         self.D = None
         self.selected_indices = None
@@ -34,11 +34,11 @@ class Choix_random:
         self.pi_prime = None
         self.edge_lengths_pi = None
 
-        # Configuration de la fenêtre principale
+      
         self.main_frame = Frame(parent)
         self.main_frame.pack(expand=True, fill=BOTH, padx=10, pady=10)
 
-        # Boutons en haut
+       
         self.btn_frame = Frame(self.main_frame)
         self.btn_frame.pack(fill=tk.X, pady=10)
         
@@ -46,10 +46,7 @@ class Choix_random:
                  text="Afficher arbres",
                  command=self.afficher_arbres).pack(side=LEFT, padx=5)
         
-        #ttk.Button(self.btn_frame,
-                 #text="Facteur",
-                 #command=self.calculer_facteur).pack(side=LEFT, padx=5)
-        # Frame pour les arbres
+       
         ttk.Button(self.btn_frame,
                     text="Quitter",
                     style='TButton',
@@ -63,20 +60,19 @@ class Choix_random:
     def quitter_application(self):
         """Ferme proprement l'application"""
         if messagebox.askokcancel("Quitter", "Voulez-vous vraiment quitter l'application ?"):
-            self.parent.destroy()  # Ferme la fenêtre principale
-            # Si vous avez d'autres processus à arrêter, ajoutez-les ici
+            self.parent.destroy()  
 
     def afficher_arbres(self):
         """Affiche les arbres π et π' avec des points aléatoires"""
-        # Générer des points aléatoires (entre 3 et 10 points)
+        
         n_points = random.randint(3, 10)
         self.points_array = np.random.randint(2, 8, size=(n_points, 2))
         
-        # Nettoyer l'affichage précédent
+       
         if hasattr(self, 'canvas_arbres') and self.canvas_arbres:
             self.canvas_arbres.get_tk_widget().destroy()
         
-        # Calculer les arbres
+       
         while True:
             self.D = distance_matrix(self.points_array, self.points_array, p=2)
             
@@ -87,19 +83,19 @@ class Choix_random:
             if Choix_random.arbres_sont_differents(self.parent_indices, self.pi_prime, self.selected_indices):
                 break
 
-        # Création de la figure
+       
         fig = plt.Figure(figsize=(10, 4), dpi=100)
-        ax1 = fig.add_subplot(121)  # Premier arbre
-        ax2 = fig.add_subplot(122)  # Deuxième arbre
+        ax1 = fig.add_subplot(121)  
+        ax2 = fig.add_subplot(122)  
 
-        # Calcul des limites avec marge dynamique
+       
         x_min, x_max = min(self.points_array[:, 0]), max(self.points_array[:, 0])
         y_min, y_max = min(self.points_array[:, 1]), max(self.points_array[:, 1])
-        x_margin = (x_max - x_min) * 0.3  # 30% de marge
+        x_margin = (x_max - x_min) * 0.3 
         y_margin = (y_max - y_min) * 0.3
 
 
-        # Dessiner le premier arbre (π)
+        
         ax1.scatter(self.points_array[:,0], self.points_array[:,1], c='gray', s=50)
         for k in range(1, len(self.selected_indices)):
             child = self.selected_indices[k]
@@ -117,11 +113,11 @@ class Choix_random:
         
         ax1.set_title("Arbre π (Farthest-First)")
         ax1.grid(True)
-        ax1.set_xlim(x_min - x_margin, x_max + x_margin)  # Marge dynamique
+        ax1.set_xlim(x_min - x_margin, x_max + x_margin)  
         ax1.set_ylim(y_min - y_margin, y_max + y_margin)
-        ax1.set_aspect('equal')  # Ratio carré
+        ax1.set_aspect('equal')  
 
-        # Dessiner le deuxième arbre (π')
+        
         ax2.scatter(self.points_array[:,0], self.points_array[:,1], c='gray', s=50)
         for (child_num, parent_num), length in self.edge_lengths_pi.items():
             child_idx = self.selected_indices[child_num-1]
@@ -133,25 +129,25 @@ class Choix_random:
             ax2.text(mid_x, mid_y, f"{length:.2f}", fontsize=8, color='blue')
         
         for k, idx in enumerate(self.selected_indices):
-            #ax2.scatter(self.points_array[idx,0]+0.5, self.points_array[idx,1], c='red', s=50)
+            
             ax2.text(self.points_array[idx,0], self.points_array[idx,1], f"{k+1}", fontsize=10, color='red')
         
         ax2.set_title("Arbre π' (Hiérarchique)")
         ax2.grid(True)
-        ax2.set_xlim(x_min - x_margin, x_max + x_margin)  # Marge dynamique
+        ax2.set_xlim(x_min - x_margin, x_max + x_margin) 
         ax2.set_ylim(y_min - y_margin, y_max + y_margin)
         ax2.set_aspect('equal')
 
         plt.tight_layout()
         plt.subplots_adjust(left=0.5, right=0.95, top=0.9, bottom=0.1)
-        # Intégration dans Tkinter
+       
 
         self.canvas_arbres = FigureCanvasTkAgg(fig, master=self.arbres_frame)
         self.canvas_arbres.draw()
         self.canvas_arbres.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
     def calculer_cout(self):
-        """Calcule et affiche le coût de clustering"""
+        
         if not hasattr(self, 'points_array') or self.points_array is None:
             messagebox.showerror("Erreur", "Veuillez d'abord générer des arbres")
             return
@@ -174,35 +170,35 @@ class Choix_random:
             nb_clusters
         )
 
-        # Afficher les résultats dans une nouvelle fenêtre
+       
         self.afficher_resultats(resultats_df)
 
     def afficher_resultats(self, resultats_df):
-        print("Début de afficher_resultats")  # Debug
+        print("Début de afficher_resultats")  
         try:
-            # Calcul du facteur
+            
             cost_ff = resultats_df.loc[resultats_df["Méthode"] == "Farthest-First Traversal", "Coût final"].values[0]
             cost_pi = resultats_df.loc[resultats_df["Méthode"] == "Arbre hiérarchique T^π′", "Coût final"].values[0]
             facteur = cost_ff / cost_pi if cost_pi != 0 else float('nan')
-            print(f"Facteur calculé: {facteur}")  # Debug
+            print(f"Facteur calculé: {facteur}") 
 
-            # Création fenêtre
+            
             result_window = tk.Toplevel(self.parent)
             result_window.title("Résultats du calcul de coût")
             result_window.geometry("800x600")
         
-            # Frame principal
+         
             main_frame = tk.Frame(result_window)
             main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         
-            # Affichage facteur
+        
             facteur_frame = tk.Frame(main_frame)
             facteur_frame.pack(fill=tk.X, pady=5)
             tk.Label(facteur_frame, 
                 text=f"Facteur (Coût FF / Coût π′): {facteur:.4f}",
                 font=('Arial', 12, 'bold')).pack()
         
-            # Text widget avec scrollbar
+          
             text_frame = tk.Frame(main_frame)
             text_frame.pack(fill=tk.BOTH, expand=True)
         
@@ -212,7 +208,7 @@ class Choix_random:
             scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
             text_area.pack(fill=tk.BOTH, expand=True)
         
-            # Insertion données
+           
             text_area.insert(tk.END, "=== DÉTAIL DES COÛTS ===\n\n")
             for _, row in resultats_df.iterrows():
                 text_area.insert(tk.END, f"Méthode: {row['Méthode']}\n")
@@ -222,10 +218,10 @@ class Choix_random:
                 text_area.insert(tk.END, "-"*50 + "\n")
         
             text_area.config(state=tk.DISABLED)
-            print("Résultats affichés avec succès")  # Debug
+            print("Résultats affichés avec succès") 
         
         except Exception as e:
-            print(f"ERREUR dans afficher_resultats: {str(e)}")  # Debug
+            print(f"ERREUR dans afficher_resultats: {str(e)}")  
             messagebox.showerror("Erreur", f"Impossible d'afficher les résultats: {str(e)}")
     
     @staticmethod
@@ -300,7 +296,7 @@ class Choix_random:
     def comparer_k_clustering_evolutif(points, selected_indices, parent_indices, pi_prime, edge_lengths_pi, nb_clusters):
         n_points = len(points)
 
-        # --- Construction du graphe Farthest-First Traversal ---
+       
         G_ff = nx.Graph()
         for i in range(1, n_points):
             child = selected_indices[i]
@@ -315,13 +311,13 @@ class Choix_random:
         for (child_num, parent_num), weight in edge_lengths_pi.items():
             G_pi.add_edge(child_num, parent_num, weight=weight)
 
-        # --- Fonction de suppression progressive et calcul des coûts ---
+       
         def clustering_cost_evolutif(G1, G2):
             edges_sorted_ff = sorted(G1.edges(data=True), key=lambda x: x[2]['weight'], reverse=True)
             edges_sorted_pi = sorted(G2.edges(data=True), key=lambda x: x[2]['weight'], reverse=True)
             G1_copy, G2_copy = G1.copy(), G2.copy()
 
-            # Tableau des coûts finaux
+            
             results = []
 
             for i in range(nb_clusters - 1):
@@ -333,7 +329,7 @@ class Choix_random:
                 u_pi, v_pi, _ = edges_sorted_pi[i]
                 G2_copy.remove_edge(u_pi, v_pi)
 
-            # Fonction pour calculer le coût maximal du clustering actuel
+            
             def calc_cost(G):
                 comps = list(nx.connected_components(G))
                 max_diameter = 0
@@ -352,13 +348,13 @@ class Choix_random:
                             cluster_idx = idx + 1
                 return max_diameter, point_pair, cluster_idx
 
-            # Coût final Farthest-First
+           
             cost_ff, pair_ff, cluster_ff = calc_cost(G1_copy)
             # Coût final T^π′
             cost_pi, pair_pi, cluster_pi = calc_cost(G2_copy)
 
             
-            # Enregistrer dans le tableau des résultats
+        
             results.append({
                 'Méthode': 'Farthest-First Traversal',
                 'Coût final': cost_ff,
@@ -374,7 +370,7 @@ class Choix_random:
             
             return results
 
-        # Exécuter le clustering évolutif et récupérer les coûts
+       
         resultats = clustering_cost_evolutif(G_ff, G_pi)
         resultats_df = pd.DataFrame(resultats)
         coords_ff = {node: tuple(points[selected_indices[node-1]]) for node in G_ff.nodes()}
@@ -384,7 +380,7 @@ class Choix_random:
                 coords_pi[node] = tuple(points[selected_indices[node-1]])
 
         # On retourne aussi les coordonnées pour réutilisation
-        #return resultats_df, coords_ff, coords_pi
+
         resultats = clustering_cost_evolutif(G_ff, G_pi)
         resultats_df = pd.DataFrame(resultats)
 
@@ -395,11 +391,10 @@ class Choix_random:
             if 1 <= node <= len(selected_indices):
                 coords_pi[node] = tuple(points[selected_indices[node-1]])
 
-        # Retourner résultats + coordonnées
         return resultats_df, coords_ff, coords_pi
     @staticmethod
     def calculer_facteur_static(parent=None, nb_experiences=None):
-        """Version statique qui peut être appelée sans instance"""
+       
         if nb_experiences is None:
             nb_experiences = simpledialog.askinteger("Nombre d'expériences", 
                                                    "Entrez le nombre d'expériences:",
@@ -411,9 +406,7 @@ class Choix_random:
         resultats_globaux = []
         
         for iteration in range(1, nb_experiences + 1):
-            # ... (le reste de votre code de calcul existant)
-            
-            # Retournez directement les résultats au lieu de les afficher
+
             resultats_globaux.append({
                 "Itération": iteration,
                 "Coût FF": cost_ff,
@@ -427,15 +420,14 @@ class Choix_random:
 
     @staticmethod
     def calculer_facteur(parent, nb_experiences, nb_points, nb_clusters, axe_x, axe_y):
-        """Calcule le facteur cout(pi)/cout(pi') pour une seule expérience"""
+        
         try:
             while True:
                 CoûtOptimal,points,clusters =Clustering_Optimal.meilleure_clustering_optimal(nb_points, nb_clusters, axe_x, axe_y)
                 points_optimale=points
                 cout_diametre,p1, p2 = Clustering_Optimal.cout_max_diametre(clusters, points)
                 print("celui la le cout de diametre ",cout_diametre,p1, p2)
-                #Clustering_Optimal.afficher_clusters(points,clusters)
-                # Calculer les arbres
+               
                 if not isinstance(points, np.ndarray):
                     points = np.array(points, dtype=float)
 
@@ -443,8 +435,7 @@ class Choix_random:
 
                 if not clusters:
                     raise ValueError("Aucun cluster généré")
-            
-            # Vérification que tous les points sont numériques
+           
                 if not np.issubdtype(points.dtype, np.number):
                     raise ValueError("Les points doivent être numériques")
             
@@ -463,15 +454,13 @@ class Choix_random:
                 if Choix_random.arbres_sont_differents(parent_indices, pi_prime, selected_indices):
                     break
 
-            # Calculer les coûts pour le nombre de clusters spécifié
+           
             resultats_df, coords_ff, coords_pi = Choix_random.comparer_k_clustering_evolutif(
                 points, selected_indices, parent_indices, 
                 pi_prime, edge_lengths_pi, nb_clusters)
-            #Choix_random.afficher_arbre_fft(parent, points, selected_indices, parent_indices, R_values)
+            
 
-        # Assignation des valeurs
-            # Sauvegarde des résultats
-          
+
             parent.coords_ff=coords_ff
             parent.coords_pi=coords_pi
             parent.clusters=clusters
@@ -482,7 +471,7 @@ class Choix_random:
             parent.points_optimale=points_optimale
             parent.D=D
             parent.cout_diametre=cout_diametre
-           # parent.facteur_cout_similaire=facteur_cout_similaire
+           
             cost_ff = resultats_df.loc[
                 resultats_df["Méthode"] == "Farthest-First Traversal", 
                 "Coût final"].values[0]
@@ -490,7 +479,7 @@ class Choix_random:
                 resultats_df["Méthode"] == "Arbre hiérarchique T^π′", 
                 "Coût final"].values[0]
             
-            # Calculer le ratio
+    
             facteur = cost_pi / CoûtOptimal if CoûtOptimal != 0 else np.nan
             facteur_cout_similaire=cost_pi / cout_diametre if cout_diametre != 0 else np.nan
             print(f"Sauvegarde réussie - Nombre de clusters: {len(clusters)}") 
@@ -518,26 +507,26 @@ class Choix_random:
         except Exception as e:
             print(f"Erreur dans calculer_facteur: {str(e)}")
             traceback.print_exc()
-            return pd.DataFrame()  # Retourne un DataFrame vide en cas d'erreur
+            return pd.DataFrame() 
     
     def afficher_arbres_depuis_donnees(self, points_array, selected_indices, parent_indices, R_values, pi_prime, edge_lengths_pi):
     
-        # Supprimer l'ancien canvas s'il existe
+       
         if hasattr(self, 'canvas_arbres') and self.canvas_arbres:
             self.canvas_arbres.get_tk_widget().destroy()
 
-    # Création de la figure avec deux sous-graphes côte à côte
+    
         fig = plt.Figure(figsize=(10, 5), dpi=100)
         ax1 = fig.add_subplot(121)
         ax2 = fig.add_subplot(122)
 
-    # Calcul dynamique des marges
+   
         x_min, x_max = np.min(points_array[:, 0]), np.max(points_array[:, 0])
         y_min, y_max = np.min(points_array[:, 1]), np.max(points_array[:, 1])
         x_margin = (x_max - x_min) * 0.3
         y_margin = (y_max - y_min) * 0.3
 
-    # Dessin arbre π (Farthest-First)
+    
         ax1.scatter(points_array[:, 0], points_array[:, 1], c='gray', s=50)
         for k in range(1, len(selected_indices)):
             child = selected_indices[k]
@@ -558,7 +547,7 @@ class Choix_random:
         ax1.set_ylim(y_min - y_margin, y_max + y_margin)
         ax1.set_aspect('equal')
 
-    # Dessin arbre π' (Hiérarchique)
+    
         ax2.scatter(points_array[:, 0], points_array[:, 1], c='gray', s=50)
         for (child_num, parent_num), length in edge_lengths_pi.items():
             child_idx = selected_indices[child_num - 1]
@@ -580,23 +569,23 @@ class Choix_random:
 
         plt.tight_layout()
 
-    # Création du canvas et intégration dans la frame dédiée
+    
         self.canvas_arbres = FigureCanvasTkAgg(fig, master=self.arbres_frame)
         self.canvas_arbres.draw()
         self.canvas_arbres.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
 
     def afficher_resultats_facteur(self, tableau_final):
-        """Affiche les résultats du calcul de facteur"""
+       
         result_window = Toplevel(self.parent)
         result_window.title("Résultats du facteur de coût")
         result_window.geometry("800x600")
 
-        # Cadre principal
+       
         main_frame = Frame(result_window)
         main_frame.pack(fill=BOTH, expand=True, padx=10, pady=10)
 
-        # Texte résumé
+      
         summary_frame = Frame(main_frame)
         summary_frame.pack(fill=tk.X, pady=5)
     
@@ -607,30 +596,29 @@ class Choix_random:
             text=f"Ratio maximal: {facteur_max:.4f} | Ratio moyen: {facteur_moyen:.4f}",
             font=('Arial', 12, 'bold')).pack()
 
-        # Tableau des résultats
+     
         tree_frame = Frame(main_frame)
         tree_frame.pack(fill=BOTH, expand=True)
 
-        # Création du Treeview
+      
         tree = ttk.Treeview(tree_frame, columns=list(tableau_final.columns), show="headings")
         vsb = ttk.Scrollbar(tree_frame, orient="vertical", command=tree.yview)
         hsb = ttk.Scrollbar(tree_frame, orient="horizontal", command=tree.xview)
         tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
 
-        # Configuration des colonnes
+       
         for col in tableau_final.columns:
             tree.heading(col, text=col)
             tree.column(col, width=100, anchor='center')
 
-        # Ajout des données
+       
         for _, row in tableau_final.iterrows():
             tree.insert("", "end", values=list(row))
 
-        # Placement des widgets
+       
         tree.grid(row=0, column=0, sticky="nsew")
         vsb.grid(row=0, column=1, sticky="ns")
         hsb.grid(row=1, column=0, sticky="ew")
 
-        # Configuration du redimensionnement
         tree_frame.grid_rowconfigure(0, weight=1)
         tree_frame.grid_columnconfigure(0, weight=1)

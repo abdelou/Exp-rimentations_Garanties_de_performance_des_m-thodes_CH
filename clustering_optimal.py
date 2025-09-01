@@ -21,15 +21,14 @@ class Clustering_Optimal:
         pass
     @staticmethod
     def meilleure_clustering_optimal(nb_points,k_cluster,axe_x,axe_y):
-        # Générer des points aléatoires
+        
 
         points = np.random.uniform(1, max(axe_x, axe_y), size=(nb_points, 2))
         points_optimal = {i+1: list(coord) for i, coord in enumerate(points)}
 
-        # === 3. Fonction de coût (rayon max pour un clustering donné)
-        #dist_matrix = distance_matrix(coords, coords)
+      
         def k_center_optimal(points_dict, k_cluster):
-            # Préparation des données à partir du dictionnaire
+            # ici on réparation des données à partir du dictionnaire
             labels = list(points_dict.keys())
             coords = np.array([points_dict[i] for i in labels])
             label_to_index = {label: idx for idx, label in enumerate(labels)}
@@ -52,7 +51,7 @@ class Clustering_Optimal:
                     farthest_points[c_idx] = (farthest_point, cluster_max_dist)
                 return max_dist, farthest_points
 
-            # ici pour générer tous les  partitions possible
+            # ici pour générer tous les  partitions possible 
             def all_partitions_k(elements, k_cluster):
                 def helper(parts, remaining):
                     if len(parts) > k_cluster:
@@ -87,7 +86,7 @@ class Clustering_Optimal:
                 
         clusters, centers, cout, farthest_points = k_center_optimal(points_optimal, k_cluster)
         CoûtOptimal=round(cout, 3)
-        print(f"Clusters trouvés : {clusters}")  # Debug
+        print(f"Clusters trouvés : {clusters}")  
         print("les corrdoner de meilleur clustering",points.tolist() )
         return CoûtOptimal,points.tolist(),clusters
     
@@ -116,17 +115,17 @@ class Clustering_Optimal:
 
         for idx, cluster in enumerate(clusters):
             cluster_points = np.array([points[i-1] for i in cluster])
-            # Tracer les points
+            
             plt.scatter(cluster_points[:, 0], cluster_points[:, 1],
                         color=couleurs[idx % len(couleurs)],
                         label=f"Cluster {idx+1}")
 
-        # Calculer le centre du cluster
+        # ici on calculer le centre du cluster
             center = cluster_points.mean(axis=0)
-        # Calculer le rayon (distance maximale au centre)
+        # ici on  calculer le rayon c'ets a dire la distance maximale par rapport le centre 
             radius = np.max(np.linalg.norm(cluster_points - center, axis=1))
 
-        # Tracer un cercle autour du cluster
+        
             circle = plt.Circle(center, radius, color=couleurs[idx % len(couleurs)],
                             fill=False, linestyle='--', linewidth=2, alpha=0.5)
             plt.gca().add_patch(circle)
@@ -142,14 +141,14 @@ class Clustering_Optimal:
         max_diametre = -1
         point1_max = None
         point2_max = None
-        # Vérifier si points_dict est une liste ou un dict
+        # vérification  si points_dict est une liste ou un dict
         if isinstance(points_dict, list):
-            # Convertir en dict {1: [x, y], 2: [x, y], ...}
+          
             points_dict = {i + 1: pt for i, pt in enumerate(points_dict)}
 
         for cluster in clusters:
             if len(cluster) < 2:
-                continue  # Aucun diamètre à calculer si moins de 2 points
+                continue  
             try:
                 coords = np.array([points_dict[pid] for pid in cluster])
             except KeyError as e:
@@ -157,11 +156,10 @@ class Clustering_Optimal:
                 continue
             dist_mat = distance_matrix(coords, coords)
             diametre = np.max(dist_mat)
-            #max_diametre = max(max_diametre, diametre)
+            
 
             i, j = np.unravel_index(np.argmax(dist_mat), dist_mat.shape)
 
-                # Points correspondants
             candidate_p1 = coords[i].tolist()
             candidate_p2 = coords[j].tolist()
 

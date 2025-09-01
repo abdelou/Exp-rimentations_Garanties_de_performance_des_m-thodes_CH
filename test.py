@@ -8,11 +8,11 @@ class Application(tk.Tk):
         self.title("Interface de création de formes géométriques")
         self.geometry("1500x850")
         
-        # Cadre principal
+        
         self.cadre_principal = Frame(self)
         self.cadre_principal.pack(expand=True, fill=tk.BOTH)
         
-        # Cadre des contrôles
+        
         self.cadre_controles = Frame(self.cadre_principal)
         self.cadre_controles.pack(fill=tk.X, padx=5, pady=5)
         
@@ -22,25 +22,25 @@ class Application(tk.Tk):
                                       values=["Carré plein", "Diagonale droite", "Diagonale gauche", 
                                               "Cercle plein", "Droite horizontale", "Droite Verticale"])
         self.choix_forme.grid(row=0, column=1, padx=5)
-        self.choix_forme.set("Choisir une forme")  # Valeur par défaut
+        self.choix_forme.set("Choisir une forme") 
         
-        # Champ pour le nombre de points
+        #   le nombre de points
         Label(self.cadre_controles, text="Nombre de points:").grid(row=0, column=2, padx=5)
         self.entree_points = Entry(self.cadre_controles, width=5)
         self.entree_points.grid(row=0, column=3, padx=5)
-        self.entree_points.insert(0, "100")  # Valeur par défaut
+        self.entree_points.insert(0, "100")  
         
-        # Champ pour la taille axe X
+        #   la taille  de l'axe X
         Label(self.cadre_controles, text="Taille axe X:").grid(row=0, column=4, padx=5)
         self.entree_axe_x = Entry(self.cadre_controles, width=5)
         self.entree_axe_x.grid(row=0, column=5, padx=5)
-        self.entree_axe_x.insert(0, "10")  # Valeur par défaut
+        self.entree_axe_x.insert(0, "10")  
         
-        # Champ pour la taille axe Y
+        #   la taille l'axe Y
         Label(self.cadre_controles, text="Taille axe Y:").grid(row=0, column=6, padx=5)
         self.entree_axe_y = Entry(self.cadre_controles, width=5)
         self.entree_axe_y.grid(row=0, column=7, padx=5)
-        self.entree_axe_y.insert(0, "10")  # Valeur par défaut
+        self.entree_axe_y.insert(0, "10")  
         
         # Bouton pour créer la forme
         ttk.Button(self.cadre_controles,
@@ -57,12 +57,12 @@ class Application(tk.Tk):
                   text="Initialiser l'espace",
                   command=self.initialiser_espace).grid(row=0, column=10, padx=5)
         
-        # Bouton Quitter
+        # Bouton pour Quitter
         ttk.Button(self.cadre_controles,
                   text="Quitter",
                   command=self.retour_choix).grid(row=0, column=11, padx=5)
         
-        # Espace métrique (pour afficher les formes)
+        # ici l'espace métrique pour afficher des  formes
         self.frame_espace = Frame(self.cadre_principal, bg='white')
         self.frame_espace.pack(expand=True, fill=tk.BOTH, pady=20)
     
@@ -72,15 +72,13 @@ class Application(tk.Tk):
         taille_x = self.entree_axe_x.get()
         taille_y = self.entree_axe_y.get()
         print(f"Création d'un {forme_selectionnee} avec {nb_points} points, taille X={taille_x}, Y={taille_y}")
-        # Ici vous ajouterez le code pour dessiner la forme dans frame_espace
-    
+       
     def calculer_facteur_optimal(self):
         print("Calcul du facteur optimal en cours...")
     
     def initialiser_espace(self):
         print("Initialisation de l'espace...")
-        # Effacer le canvas ou réinitialiser les paramètres
-    
+       
     def retour_choix(self):
         self.quit()
 
